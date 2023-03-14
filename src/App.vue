@@ -1,30 +1,80 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div>
+    <LifeCycleHooks v-if="showHelloComp" />
+    <button @click="showHelloComp =! showHelloComp">Show/Hide</button>
+    <h3>Count : {{ count }}</h3>
+    <button @click="count++">click</button>
+
+    <Watchers />
+    <TemplateRef />
+    <h2 color="red">Parent Async Components</h2>
+    <AsyncUserComp v-if="showUser" />
+    <!---------------------------- for show & Hide AsyncUserComp -->
+    <button @click="showUser =! showUser">
+      Show/Hide
+    </button>
+
+
+    <ComposableExp />
+    <CustomDirective />
+    <TransitionAnimation />
+    <TransitionAnim />
+    <DynamicParentCompo />
+    
+  </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script setup>
 
-nav {
-  padding: 30px;
+import { 
+  onBeforeMount,
+  onMounted,
+  onBeforeUpdate,
+  onUpdated,
+  onBeforeUnmount,
+  onUnmounted,
+  ref,
+  defineAsyncComponent
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+} from 'vue';
+import ComposableExp from './components/ComposableExp.vue';
+import CustomDirective from './components/CustomDirective.vue';
+import LifeCycleHooks from './components/LifeCycleHooks.vue'
+import TemplateRef from './components/TemplateRef.vue';
+import TransitionAnimation from './components/TransitionAnimation.vue';
+import TransitionAnim from './components/TransitionAnim.vue'
+import Watchers from './components/Watchers.vue';
+import DynamicParentCompo from './components/DynamicParentCompo.vue';
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+
+const showHelloComp = ref(true)
+const count = ref(0)
+
+// Async Component
+const AsyncUserComp = defineAsyncComponent(() => 
+  import("./components/AsyncComponents.vue")
+);
+
+const showUser = ref(false)
+
+onBeforeMount(() => {
+  console.log("OnBeforeMounted Called - Parent")
+});
+onMounted(() => {
+  console.log("onMounted Called - Parent")
+});
+onBeforeUpdate(() => {
+  console.log("onBeforeUpdate Called - Parent")
+});
+onUpdated(() => {
+  console.log("onUpdated Called - Parent")
+});
+onBeforeUnmount(() => {
+  console.log("onBeforeUnmount Called - Parent")
+});
+onUnmounted(() => {
+  console.log("onUnmounted Called - Parent")
+});
+
+
+</script>
